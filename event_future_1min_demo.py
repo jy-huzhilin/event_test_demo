@@ -21,6 +21,8 @@ class event_future_1min_demo:
 
         working = df.copy()
         working["time"] = pd.to_datetime(working["time"])
+        working["open"] = pd.to_numeric(working["open"], errors="coerce")
+        working["close"] = pd.to_numeric(working["close"], errors="coerce")
         current_ts = pd.Timestamp(current_time)
 
         if "create_time" in working.columns:
@@ -30,6 +32,8 @@ class event_future_1min_demo:
         current_df = working[working["time"] == current_ts].copy()
         if current_df.empty:
             raise RuntimeError(f"cbond.future_hf_1min 尚未更新到 {current_ts.strftime('%Y-%m-%d %H:%M:%S')}")
+        if current_df[["open", "close"]].isna().any().any():
+            raise RuntimeError("cbond.future_hf_1min 的 open/close 含有非数值内容")
 
         current_df["value"] = current_df["close"] - current_df["open"]
         current_df = current_df.rename(columns={"ths_code": "symbol"})
