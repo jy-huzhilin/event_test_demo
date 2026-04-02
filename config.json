@@ -1,0 +1,48 @@
+{
+  "name": "event_future_1min_demo",
+  "type": "factor",
+  "input": [
+    {
+      "db": "basic_data_db",
+      "group_name": "",
+      "sources": [
+        {
+          "table": "cbond.future_hf_1min",
+          "columns": [
+            "open",
+            "close",
+            "high",
+            "low",
+            "volume",
+            "create_time"
+          ]
+        }
+      ],
+      "drop_duplicate": true,
+      "start_time": "-600",
+      "end_time": "schedule_now"
+    }
+  ],
+  "output": [
+    {
+      "group_name": "event_future_1min_demo",
+      "fields": [
+        "demo__future_minute_spread__1m"
+      ],
+      "category_1": "pv",
+      "category_2": "future",
+      "category_3": "event-demo",
+      "target": "future",
+      "description": "事件驱动分钟线 demo：输出每个标的最新一分钟的 close-open"
+    }
+  ],
+  "schedule": [
+    "****-**-** **:**:00"
+  ],
+  "computation": {
+    "external_source": "event_future_1min_demo.py",
+    "class_name": "event_future_1min_demo",
+    "single": "compute",
+    "batch": ""
+  }
+}
